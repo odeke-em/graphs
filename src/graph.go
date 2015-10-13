@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-func NewGraph(connections map[interface{}][]interface{}) *Graph {
+func NewGraph() *Graph {
 	g := Graph{
 		vertices: make(map[interface{}]*Vertex),
 		edges:    make(AdjMap),
@@ -60,11 +60,15 @@ func (g *Graph) AddVertex(data interface{}) (*Vertex, bool) {
 	return prev, !found
 }
 
-func (g *Graph) AddEdge(fromData, toData interface{}, cost int64) (*Edge, bool) {
+func (g *Graph) UpdateEdge(fromData, toData interface{}, cost int64) (*Edge, bool) {
 	uVert, _ := g.AddVertex(fromData)
 	vVert, _ := g.AddVertex(toData)
 
 	uAdjMap := g.edges[fromData]
+	if uAdjMap == nil {
+		uAdjMap = make(map[interface{}]*Edge)
+	}
+
 	edge, found := uAdjMap[toData]
 	if !found {
 		edge = &Edge{from: uVert, to: vVert}
@@ -88,13 +92,12 @@ func (g *Graph) Edge(fromData, toData interface{}) *Edge {
 }
 
 func (g *Graph) DeepCopy() *Graph {
-	copy := &Graph{
-		etag: g.etag,
-	}
+	copy := NewGraph()
+	copy.etag = g.etag
 
 	for fromData, neighbours := range g.edges {
 		for toData, edge := range neighbours {
-			copy.AddEdge(fromData, toData, edge.cost)
+			copy.UpdateEdge(fromData, toData, edge.cost)
 		}
 	}
 
