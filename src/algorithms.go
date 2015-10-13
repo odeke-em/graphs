@@ -36,8 +36,7 @@ func dfsVisit(g *Graph, u *Vertex, t *int64, visitOrder *[]interface{}) {
 
 	visitInfo := VisitInfo{discoveryTime: *t}
 	u.color = Gray
-
-	adjV := g.Adj(u)
+	adjV := g.Adj(u.Data())
 
 	for _, v := range adjV {
 		if v.color == White {
@@ -47,7 +46,9 @@ func dfsVisit(g *Graph, u *Vertex, t *int64, visitOrder *[]interface{}) {
 	}
 
 	*t += 1
-	visitInfo.finishTime = *t
-	u.meta = visitInfo
 	*visitOrder = append(*visitOrder, u.Data())
+	visitInfo.finishTime = *t
+
+	u.meta = visitInfo
+	u.color = Black
 }
