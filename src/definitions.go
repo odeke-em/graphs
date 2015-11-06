@@ -33,7 +33,7 @@ type VisitInfo struct {
 
 type Edge struct {
 	from, to *Vertex
-	cost     int64
+	cost     float64
 }
 
 type Graph struct {

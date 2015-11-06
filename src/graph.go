@@ -60,7 +60,7 @@ func (g *Graph) AddVertex(data interface{}) (*Vertex, bool) {
 	return prev, !found
 }
 
-func (g *Graph) UpdateEdge(fromData, toData interface{}, cost int64) (*Edge, bool) {
+func (g *Graph) UpdateEdge(fromData, toData interface{}, cost float64) (*Edge, bool) {
 	uVert, _ := g.AddVertex(fromData)
 	vVert, _ := g.AddVertex(toData)
 
