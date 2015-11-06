@@ -19,6 +19,18 @@ const (
 	Sparse
 )
 
+func (i *Identity) String() string {
+	switch *i {
+	case Empty:
+		return "empty"
+	case Dense:
+		return "dense"
+	case Sparse:
+		return "sparse"
+	}
+	return "unknown-identity"
+}
+
 type Vertex struct {
 	data        interface{}
 	color       Color

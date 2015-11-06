@@ -43,7 +43,7 @@ func (g *Graph) Identity() Identity {
 	}
 
 	ratio := float32(g.EdgeCount()) / float32(v2)
-	if ratio >= 0.8 {
+	if ratio >= 0.75 {
 		return Dense
 	}
 
@@ -113,6 +113,25 @@ func (g *Graph) Adj(v interface{}) (adjl []*Vertex) {
 	adjl = make([]*Vertex, 0, len(edgeList))
 	for _, edge := range edgeList {
 		adjl = append(adjl, edge.to)
+	}
+
+	return
+}
+
+func (g *Graph) VerticesByChan() chan interface{} {
+	vChan := make(chan interface{})
+	go func() {
+		for rawData, _ := range g.vertices {
+			vChan <- rawData
+		}
+	}()
+
+	return vChan
+}
+
+func (g *Graph) Vertices() (vertices []interface{}) {
+	for rawData, _ := range g.vertices {
+		vertices = append(vertices, rawData)
 	}
 
 	return

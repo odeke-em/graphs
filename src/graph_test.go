@@ -73,24 +73,71 @@ func TestIdentities(t *testing.T) {
 	}
 }
 
-func BenchmarkNewGraph(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		NewGraph()
-	}
-}
-
-func BenchmarkSingleVertexInsertion(b *testing.B) {
+func TestIdentity(t *testing.T) {
 	g := NewGraph()
-	for i := 0; i < b.N; i++ {
-		g.AddVertex(g)
+	if g.Identity() != Empty {
+		t.Errorf("No insertion has been made into the graph yet")
 	}
-}
 
-func BenchmarkMultiVertexInsertion(b *testing.B) {
-	g := NewGraph()
-	for i := 0; i < b.N; i++ {
-		for j := 0; j < 1000; j++ {
-			g.AddVertex(j)
+	edges := map[int][]int{
+		2: []int{9, 10, 12},
+		3: []int{2, 5, 6},
+		5: []int{1, 3},
+		6: []int{2, 3, 5, 9, 10, 12},
+	}
+
+	for onlySrc, _ := range edges {
+		g.AddVertex(onlySrc)
+	}
+
+	if idt := g.Identity(); idt != Sparse {
+		t.Errorf("expected sparseness, no edge connections yet, got %q", idt.String())
+	}
+
+	pivot := 2
+	onlyPivotConnections, _ := edges[pivot]
+	for _, dest := range onlyPivotConnections {
+		g.UpdateEdge(pivot, dest, 0)
+	}
+
+	if idt := g.Identity(); idt != Sparse {
+		t.Errorf("expected sparseness, some edge connections but not most, got %q", idt.String())
+	}
+
+	// Let's make it dense now
+	srcs := []int{}
+	for src, nbs := range edges {
+		srcs = append(srcs, src)
+		for _, nb := range nbs {
+			g.UpdateEdge(src, nb, 10)
+			g.UpdateEdge(nb, src, 10)
 		}
+	}
+
+	vertices := g.Vertices()
+	for i, n := 0, len(vertices); i < n; i++ {
+		src := vertices[0]
+		for j := 0; j < n; j++ {
+			dest := vertices[j]
+			g.UpdateEdge(src, dest, -1)
+		}
+	}
+
+	for i, n := 0, len(srcs); i < n; i++ {
+		for j := 0; j < n; j++ {
+			otherNbs, _ := edges[srcs[j]]
+
+			g.UpdateEdge(srcs[i], srcs[j], 20)
+			g.UpdateEdge(srcs[j], srcs[i], 20)
+
+			for _, otherNb := range otherNbs {
+				g.UpdateEdge(srcs[i], otherNb, 20)
+				g.UpdateEdge(otherNb, srcs[i], 20)
+			}
+		}
+	}
+
+	if idt := g.Identity(); idt != Dense {
+		t.Errorf("expected a dense graph, got %q", idt.String())
 	}
 }
