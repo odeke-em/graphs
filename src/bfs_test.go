@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestDFSInit(t *testing.T) {
+func TestBFSInit(t *testing.T) {
 	g := NewGraph()
 
 	nodes := map[int][]int{
@@ -21,10 +21,10 @@ func TestDFSInit(t *testing.T) {
 		}
 	}
 
-	dfsdG, walkOrder := DFSOnFresh(g)
-	if dfsdG == g {
+	bfsdG, walkOrder := BFSOnFresh(g, 2)
+	if bfsdG == g {
 		t.Errorf("a fresh copy should have been made before DFS operation")
 	}
 
-	fmt.Println("dfs::walkOrder", walkOrder)
+	fmt.Println("bfs::walkOrder", walkOrder)
 }

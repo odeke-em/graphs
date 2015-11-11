@@ -26,6 +26,11 @@ func (g *Graph) VertexCount() int {
 	return len(g.vertices)
 }
 
+func (g *Graph) VertexByKey(q interface{}) *Vertex {
+	v, _ := g.vertices[q]
+	return v
+}
+
 func (g *Graph) V() []*Vertex {
 	v := make([]*Vertex, 0, g.VertexCount())
 	for _, it := range g.vertices {
