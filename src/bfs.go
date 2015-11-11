@@ -26,11 +26,11 @@ func bfs(g *Graph, source interface{}) (walkOrder []interface{}) {
 		if v != sourceVertex {
 			v.color = White
 			v.predecessor = nil
-			v.meta = int64(math.MaxInt64)
+			v.meta = VisitInfo{depth: math.MaxInt64}
 		}
 	}
 
-	sourceVertex.meta = 0
+	sourceVertex.meta = VisitInfo{depth: 0}
 	sourceVertex.predecessor = nil
 	sourceVertex.color = Gray
 
@@ -48,10 +48,15 @@ func bfs(g *Graph, source interface{}) (walkOrder []interface{}) {
 
 		adjV := g.Adj(u.Data())
 
+		uvi, ok := u.meta.(VisitInfo)
+		if !ok {
+			panic("invalid attr saved in meta, not of type 'VisitInfo'")
+		}
+
 		for _, v := range adjV {
 			if v.color == White {
 				v.color = Gray
-				v.meta = plusOneInt64(u.meta)
+				v.meta = VisitInfo{depth: uvi.depth + 1}
 				v.predecessor = u
 
 				// Enqueue v
@@ -63,12 +68,4 @@ func bfs(g *Graph, source interface{}) (walkOrder []interface{}) {
 		u.color = Black
 	}
 	return
-}
-
-func plusOneInt64(v interface{}) int64 {
-	var value int64 = math.MaxInt64
-	if cast, ok := v.(int64); ok {
-		value = cast + 1
-	}
-	return value
 }

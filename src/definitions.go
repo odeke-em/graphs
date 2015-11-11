@@ -39,8 +39,21 @@ type Vertex struct {
 }
 
 type VisitInfo struct {
+	depth         int64
 	discoveryTime int64
 	finishTime    int64
+}
+
+func (vi *VisitInfo) DiscoveryTime() int64 {
+	return vi.discoveryTime
+}
+
+func (vi *VisitInfo) FinishTime() int64 {
+	return vi.finishTime
+}
+
+func (vi *VisitInfo) Depth() int64 {
+	return vi.depth
 }
 
 type Edge struct {
