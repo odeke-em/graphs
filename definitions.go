@@ -19,6 +19,19 @@ const (
 	Sparse
 )
 
+func (c *Color) String() string {
+	switch *c {
+	case Black:
+		return "black"
+	case White:
+		return "white"
+	case Gray:
+		return "gray"
+	}
+
+	return "unknown"
+}
+
 func (i *Identity) String() string {
 	switch *i {
 	case Empty:

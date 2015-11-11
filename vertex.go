@@ -1,5 +1,7 @@
 package graph
 
+import "fmt"
+
 func NewVertex(data interface{}) *Vertex {
 	return &Vertex{
 		data:        data,
@@ -31,4 +33,11 @@ func (v *Vertex) Data() interface{} {
 		return nil
 	}
 	return v.data
+}
+
+func (v *Vertex) String() string {
+	if v == nil {
+		return "nil"
+	}
+	return fmt.Sprintf("[%v<=%v]::%v", v.data, v.predecessor, v.color.String())
 }
