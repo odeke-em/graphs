@@ -34,7 +34,7 @@ func dfsRun() {
 		8:  []int{9, 3, 1},
 		1:  []int{},
 		11: []int{12, 19, 8},
-        -1: []int{2, 8, 1, 11, -1, 3, 9, 12, -1000},
+		-1: []int{2, 8, 1, 11, -1, 3, 9, 12, -1000},
 	}
 
 	for src, nbs := range nodes {
@@ -54,7 +54,7 @@ func bfsRun() {
 		8:  []int{9, 3, 1},
 		1:  []int{},
 		11: []int{12, 19, 8},
-        -1: []int{2, 8, 1, 11, -1, 3, 9, 12, -1000},
+		-1: []int{2, 8, 1, 11, -1, 3, 9, 12, -1000},
 	}
 
 	for src, nbs := range nodes {
@@ -63,19 +63,19 @@ func bfsRun() {
 		}
 	}
 
-    for src, _ := range nodes {
-	    BFSOnFresh(g, src)
-    }
+	for src, _ := range nodes {
+		BFSOnFresh(g, src)
+	}
 }
 
 func BenchmarkDFS(b *testing.B) {
-    for i := 0; i < b.N; i++ {
-        dfsRun()
-    }
+	for i := 0; i < b.N; i++ {
+		dfsRun()
+	}
 }
 
 func BenchmarkBFS(b *testing.B) {
-    for i := 0; i < b.N; i++ {
-        bfsRun()
-    }
+	for i := 0; i < b.N; i++ {
+		bfsRun()
+	}
 }
